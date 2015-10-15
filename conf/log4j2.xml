@@ -1,29 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="INFO" name="stream-tributary">
-    <Appenders>
-         -->
-        <Socket name="SYSLOG-NG" host="localhost" port="514" protocol="UDP">
-            <PatternLayout>
-                <!--
-                    Priority is calculated by: facility * 8 + level
-                    Due to limitations of the Syslog appender and default SyslogLayout,
-                    as well as syslog-ng 2.1.4 only supporting BSD format,
-                    these messages are set to go to Local4 with a level of INFO
-                    to take advantage of existing syslog-ng.conf local4 log
-                -->
-                <Pattern>
-                    &lt;166&gt;%d{MMM dd HH:mm:ss} ${hostName} stream-tributary: [%p] %c{1} %m %ex{short.lineNumber}%n
-                </Pattern>
-            </PatternLayout>
-        </Socket>
-        <Console name="STDOUT" target="SYSTEM_OUT">
-            <PatternLayout pattern="%m%n"/>
-        </Console>
-    </Appenders>
-    <Loggers>
-        <Root level="INFO">
-            <AppenderRef ref="STDOUT"/>
-            <AppenderRef ref="SYSLOG-NG"/>
-        </Root>
-    </Loggers>
+<Configuration status="WARN" name="stream-tributary">
+	<Appenders>
+		<Console name="STDOUT" target="SYSTEM_OUT">
+			<PatternLayout pattern="[%p] %d %c{2}.%M - %m%n"/>
+		</Console>
+	</Appenders>
+	<Loggers>
+		<Logger name="com.monetate" level="DEBUG" additivity="false">
+			<AppenderRef ref="STDOUT" />
+		</Logger>
+		<Root level="INFO">
+			<AppenderRef ref="STDOUT" />
+		</Root>
+	</Loggers>
 </Configuration>

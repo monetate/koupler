@@ -1,30 +1,26 @@
-Proof of Concept for Real-time Ingest
+Koupler
 =====================================
 
-This project generates an executable jar that is capable of taking input from STDIN or from a compressed log
-retrieved from S3 and outputing records to a named Kinesis stream.
+This project provides TCP, UDP and Pipe interaces for Kinesis.
 
 Building
 --------
-
-This module will stream data from log files stored in S3 to a kinesis stream.
-
-To build:
 ```bash
-   /build.sh
+   mvn -Dmaven.test.skip=true clean assembly:assembly
 ```
 
-To build and copy artifact into S3:
-```bash
-   /build.sh install
-```
-
-Testing
+Usage
 -------
+After a successful compile, simply run:
+```bash
+  $./koupler.sh 
+```
 
-Ensure the right JDK is being used and then run:
+Here is the usage information:
+```bash
+  $./koupler.sh 
+```
 
-`mvn test`
 
 Using
 -----

@@ -2,7 +2,7 @@ Koupler
 =====================================
 
 This project provides TCP, UDP and Pipe interaces for Amazon's Kinesis.  Underneath the covers, it uses
-the Kinesis Producer Library (KPL).
+the [Kinesis Producer Library (KPL)](https://github.com/awslabs/amazon-kinesis-producer).
 
 Building
 --------

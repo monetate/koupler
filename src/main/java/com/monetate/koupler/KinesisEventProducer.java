@@ -32,6 +32,8 @@ public class KinesisEventProducer implements Runnable {
     private KouplerMetrics metrics;
     private KinesisProducer producer;
     private String streamName;
+    private int partitionKeyField;
+    private String delimiter;
     private BlockingQueue<String> queue = new ArrayBlockingQueue<String>(1000);
 
     public KinesisEventProducer(){}
@@ -42,6 +44,8 @@ public class KinesisEventProducer implements Runnable {
         this.streamName = streamName;
         this.producer = new KinesisProducer(config);
         this.metrics = new KouplerMetrics(config);
+        this.partitionKeyField = partitionKeyField;
+        this.delimiter = delimiter;
     }
     
     public void queueEvent(String event){
@@ -49,12 +53,11 @@ public class KinesisEventProducer implements Runnable {
     }
 
     public String getPartitionKey(String event) {
-        String[] record = event.split(",");
-        StringBuilder sb = new StringBuilder();
-        if (record.length >= 7) {
-            return sb.append(record[4]).append(":").append(record[5]).append(":").append(record[6]).toString();
+        String[] fields = event.split(",");
+        if (fields.length > this.partitionKeyField) {
+            return fields[partitionKeyField];
         } else {
-            LOGGER.warn("Received line w/o enough fields to retrieve partition key. [{}]", event);
+            LOGGER.warn("Received event w/o enough fields to retrieve partition key. [{}]", event);
             return null;
         }
     }

@@ -1,7 +1,8 @@
 Koupler
 =====================================
 
-This project provides TCP, UDP and Pipe interaces for Amazon's Kinesis.
+This project provides TCP, UDP and Pipe interaces for Amazon's Kinesis.  Underneath the covers, it uses
+the Kinesis Producer Library (KPL).
 
 Building
 --------
@@ -11,12 +12,12 @@ Building
 
 Usage
 -------
-After a successful compile, simply run:
+After a successful build, simply run the following to get usage information:
 ```bash
   $./koupler.sh 
 ```
 
-Here is the usage information:
+You should see the following:
 ```bash
    $ ./koupler.sh
    Must specify either: udp, tcp or pipe
@@ -53,6 +54,18 @@ Next, fire up the TCP server and throw some data at it!
 ```bash
    $ ./koupler.sh -tcp -streamName boneill-dev-test
 ```
+
+You can then fire events at the TCP server directly.  Each line represents an event, which will be sent through Kinesis using KPL.
+```bash
+   $ telnet localhost 4242
+   Trying ::1...
+   Connected to localhost.
+   Escape character is '^]'.
+   lisa
+   collin
+owen
+```
+
 
 
 

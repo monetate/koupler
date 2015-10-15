@@ -145,6 +145,8 @@ public abstract class Koupler implements Runnable {
         }
         
         if (server) {
+            Thread producerThread = new Thread(producer);
+            producerThread.start();
             Thread kouplerThread = new Thread(koupler);
             kouplerThread.start();
         }

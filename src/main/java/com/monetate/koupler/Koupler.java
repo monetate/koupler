@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Main Class, and super class to all the koupler implementations.
+ * 
  * @author brianoneill
  */
 public abstract class Koupler implements Runnable {
@@ -83,6 +84,7 @@ public abstract class Koupler implements Runnable {
         options.addOption("udp", false, "udp mode");
         options.addOption("tcp", false, "tcp mode");
         options.addOption("pipe", false, "pipe mode");
+        options.addOption("consumer", false, "consumer mode");
 
         options.addOption("streamName", true, "kinesis stream name");
 
@@ -107,8 +109,8 @@ public abstract class Koupler implements Runnable {
         }
 
         // Check to see they specified one of (udp, tcp or pipe)
-        if (!cmd.hasOption("udp") && !cmd.hasOption("tcp") && !cmd.hasOption("pipe")) {
-            System.err.println("Must specify either: udp, tcp or pipe");
+        if (!cmd.hasOption("udp") && !cmd.hasOption("tcp") && !cmd.hasOption("pipe") && !cmd.hasOption("consumer")) {
+            System.err.println("Must specify either: udp, tcp, pipe, or consumer");
             misconfigured = true;
         }
 
@@ -130,15 +132,22 @@ public abstract class Koupler implements Runnable {
         KinesisEventProducer producer = new KinesisEventProducer(propertiesFile, streamName, delimiter, partitionKeyField);
 
         Koupler koupler = null;
+        boolean server = true;
         if (cmd.hasOption("tcp")) {
             koupler = new TcpKoupler(producer, port);
         } else if (cmd.hasOption("udp")) {
             koupler = new UdpKoupler(producer, port);
         } else if (cmd.hasOption("pipe")) {
             koupler = new UdpKoupler(producer, port);
+        } else if (cmd.hasOption("consumer")) {
+            KinesisEventConsumer consumer = new KinesisEventConsumer(propertiesFile, streamName);
+            consumer.start();
         }
-        Thread kouplerThread = new Thread(koupler);
-        kouplerThread.start();
+        
+        if (server) {
+            Thread kouplerThread = new Thread(koupler);
+            kouplerThread.start();
+        }
     }
 
 }

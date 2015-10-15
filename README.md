@@ -1,7 +1,7 @@
 Koupler
 =====================================
 
-This project provides TCP, UDP and Pipe interaces for Kinesis.
+This project provides TCP, UDP and Pipe interaces for Amazon's Kinesis.
 
 Building
 --------
@@ -18,38 +18,41 @@ After a successful compile, simply run:
 
 Here is the usage information:
 ```bash
-  $./koupler.sh 
+   $ ./koupler.sh
+   Must specify either: udp, tcp or pipe
+   Must specify stream name.
+   usage: java -jar koupler*.jar
+    -delimiter <arg>          delimiter between fields (default: ',')
+    -paritionKeyField <arg>   field containing partition key (default: 0)
+    -pipe                     pipe mode
+    -port <arg>               listening port (default: 4242)
+    -propertiesFile <arg>     kpl properties file (default: ./conf/kpl.properties)
+    -streamName <arg>         kinesis stream name
+    -tcp                      tcp mode
+    -udp                      udp mode
 ```
 
-
-Using
+The Consumer
 -----
 
-The executable is expecting a properties file to be located at `/mnt/deployment/real-time/kpl.properties`
-This file should contain properties for a KPL app/producer.
-
-[example](https://github.com/awslabs/amazon-kinesis-producer/blob/master/java/amazon-kinesis-producer-sample/default_config.properties)
-
-
-
-To run:
+To kick the tires a bit, you can start the built-in consumer.  The built-in consumer will output messages from the stream to the console.
+ 
 ```bash
-
-    # Ensure JVM > 1.7 is being used
-    # To play a log file out of S3 into Kinesis
-    java -jar target/stream-tributary.jar test-stream log.monetate.net fact_page_view/2015/08/01/
-
-    # To send messages from STDIN to the specified Kinesis stream
-    # Ensure kpl.properties is located in same dir as jar
-    seq 10 | /opt/jdk1.7.0_79/bin/java -jar /mnt/deployment/real-time/stream-tributary.jar test-stream
+   $ ./koupler.sh -consumer -streamName  boneill-dev-test
+   [INFO] 2015-10-14 23:36:43,254 producer.KinesisProducerConfiguration.fromPropertiesFile - Attempting to load config from file ./conf/kpl.properties
+   [2015-10-14 23:36:43.583341] [0x00007fff7120e000] [info] [metrics_manager.h:148] Uploading metrics to monitoring.us-east-1.amazonaws.com:443
+   [INFO] 2015-10-14 23:36:43,915 producer.KinesisProducerConfiguration.fromPropertiesFile - Attempting to load config from file ./conf/kpl.properties
+   ...
+   INFO: Initializing shard shardId-000000000000 with TRIM_HORIZON
 ```
 
-Logging
--------
+TCP
+-----
+Next, fire up the TCP server and throw some data at it!
 
-Logs are currently configured to write out to the console as well as /var/log/monetate/stream-tributary.log
+```bash
+   $ ./koupler.sh -tcp -streamName boneill-dev-test
+```
 
-To override logging with a custom log4j config, specify the system property `-Dlog4j
-.configurationFile=path/to/your/log4j2.xml`
 
 

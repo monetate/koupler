@@ -138,7 +138,7 @@ public abstract class Koupler implements Runnable {
         } else if (cmd.hasOption("udp")) {
             koupler = new UdpKoupler(producer, port);
         } else if (cmd.hasOption("pipe")) {
-            koupler = new UdpKoupler(producer, port);
+            koupler = new PipeKoupler(producer);
         } else if (cmd.hasOption("consumer")) {
             KinesisEventConsumer consumer = new KinesisEventConsumer(propertiesFile, streamName);
             consumer.start();
@@ -147,6 +147,7 @@ public abstract class Koupler implements Runnable {
         if (server) {
             Thread producerThread = new Thread(producer);
             producerThread.start();
+            
             Thread kouplerThread = new Thread(koupler);
             kouplerThread.start();
         }

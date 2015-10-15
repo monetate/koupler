@@ -36,8 +36,9 @@ public class KinesisEventProducer implements Runnable {
     private String delimiter;
     private BlockingQueue<String> queue = new ArrayBlockingQueue<String>(1000);
 
-    public KinesisEventProducer(){}
-    
+    public KinesisEventProducer() {
+    }
+
     public KinesisEventProducer(String propertiesFile, String streamName, String delimiter, int partitionKeyField) {
         KinesisProducerConfiguration config = KinesisProducerConfiguration.fromPropertiesFile(propertiesFile);
 
@@ -47,8 +48,8 @@ public class KinesisEventProducer implements Runnable {
         this.partitionKeyField = partitionKeyField;
         this.delimiter = delimiter;
     }
-    
-    public void queueEvent(String event){
+
+    public void queueEvent(String event) {
         this.queue.add(event);
     }
 
@@ -68,8 +69,8 @@ public class KinesisEventProducer implements Runnable {
      */
     @Override
     public void run() {
-        try {
-            while (RUNNING) {
+        while (RUNNING) {
+            try {
                 if (producer != null && producer.getOutstandingRecordsCount() > THROTTLE_ON_QUEUE_SIZE) {
                     LOGGER.warn("Throttling ingest, waiting [{}] milliseconds because we are waiting on [{}] records.",
                             backOff, this.producer.getOutstandingRecordsCount());
@@ -80,15 +81,12 @@ public class KinesisEventProducer implements Runnable {
                     send(event);
                     backOff = DEFAULT_BACKOFF;
                 }
-
+            } catch (Exception e) {
+                LOGGER.error("Error while processing event queue.", e);
             }
-        } catch (Exception e) {
-            LOGGER.error("Error while processing event queue.", e);
         }
     }
 
-    
-    
     public void send(String event) throws UnsupportedEncodingException {
         byte[] bytes = event.getBytes("UTF-8");
         this.metrics.queueEvent(bytes.length);
@@ -105,6 +103,7 @@ public class KinesisEventProducer implements Runnable {
                     }
                     LOGGER.error("Exception during put", t);
                 }
+
                 @Override
                 public void onSuccess(UserRecordResult result) {
                     metrics.ackEvent();

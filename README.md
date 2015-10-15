@@ -2,7 +2,10 @@ Koupler
 =====================================
 
 This project provides TCP, UDP and Pipe interaces for Amazon's Kinesis.  Underneath the covers, it uses
-the [Kinesis Producer Library (KPL)](https://github.com/awslabs/amazon-kinesis-producer).
+the [Kinesis Producer Library (KPL)](https://github.com/awslabs/amazon-kinesis-producer).  The daemon 
+listens on TCP/UDP, or takes input from a pipe.  Regardless of the mode, it handles the stream line-by-line, 
+splitting the line based on the delimiter supplied, and then uses the specified field as the Kinesis partition key
+and queues the message with KPL.
 
 Building
 --------
@@ -59,7 +62,8 @@ Next, fire up the TCP server and throw some data at it!  The following is an exa
    $ ./koupler.sh -tcp -streamName boneill-dev-test
 ```
 
-You can then fire events at the TCP server directly.  Each line represents an event, which will be sent through Kinesis using KPL.
+You can sling data at the UDP listener with the following:
+
 ```bash
    $ telnet localhost 4242
    Trying ::1...
@@ -72,11 +76,40 @@ You can then fire events at the TCP server directly.  Each line represents an ev
 
 And in the consumer you should see:
 ```bash
-[DEBUG] 2015-10-14 23:50:24,456 koupler.KinesisEventConsumer.processRecords - Recieved [lisa]
-[DEBUG] 2015-10-14 23:50:24,456 koupler.KinesisEventConsumer.processRecords - Recieved [collin]
-[DEBUG] 2015-10-14 23:50:24,456 koupler.KinesisEventConsumer.processRecords - Recieved [owen]
+   [DEBUG] 2015-10-14 23:50:24,456 koupler.KinesisEventConsumer.processRecords - Recieved [lisa]
+   [DEBUG] 2015-10-14 23:50:24,456 koupler.KinesisEventConsumer.processRecords - Recieved [collin]
+   [DEBUG] 2015-10-14 23:50:24,456 koupler.KinesisEventConsumer.processRecords - Recieved [owen]
 ```
 
+UDP
+-----
 
+Next, fire up the UDP server!  The following is an example command-line.
 
+```bash
+   $ ./koupler.sh -udp -streamName boneill-dev-test
+```
+
+You can sling data at the UDP listener with the following:
+
+```bash
+   $ nc -u localhost 4242
+   murphy
+   bailey
+```
+
+Pipe
+-----
+
+Finally, for those that like pipes, we have the always versatile pipe version:
+
+```bash
+   $ printf "hello\nworld\n" | ./koupler.sh -pipe -streamName boneill-dev-test
+   [INFO] 2015-10-15 00:18:05,031 producer.KinesisProducerConfiguration.fromPropertiesFile - Attempting to load config from file ./conf/kpl.properties
+   [INFO] 2015-10-15 00:18:05,058 producer.KinesisProducer.extractBinaries - Extracting binaries to /var/folders/2f/wqb5702967s58rtsgb5kzd940000gp/T/amazon-kinesis-producer-native-binaries
+   [2015-10-15 00:18:05.360559] [0x00007fff7120e000] [info] [metrics_manager.h:148] Uploading metrics to monitoring.us-east-1.amazonaws.com:443
+   [INFO] 2015-10-15 00:18:05,699 koupler.KinesisEventProducer.<init> - Firing up pipe listener
+   [DEBUG] 2015-10-15 00:18:05,703 koupler.Koupler.call - Queueing event [hello]
+   [DEBUG] 2015-10-15 00:18:05,703 koupler.Koupler.call - Queueing event [world]
+```
 

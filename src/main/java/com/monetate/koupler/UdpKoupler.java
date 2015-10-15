@@ -33,7 +33,8 @@ public class UdpKoupler extends Koupler implements Runnable {
                 PACKETS.getAndIncrement();
                 byte[] received = new byte[packet.getLength()];
                 System.arraycopy(buf, 0, received, 0, packet.getLength());
-                String event = new String(buf, 0, packet.getLength());
+                String event = new String(buf, 0, packet.getLength()).trim();
+                LOGGER.debug("Queueing event [{}]", event);
                 producer.queueEvent(event);
             }
         } catch (Exception e){

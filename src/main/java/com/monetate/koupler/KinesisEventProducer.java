@@ -53,7 +53,7 @@ public class KinesisEventProducer implements Runnable {
     }
 
     public String getPartitionKey(String event) {
-        String[] fields = event.split(",");
+        String[] fields = event.split(this.delimiter);
         if (fields.length > this.partitionKeyField) {
             return fields[partitionKeyField];
         } else {

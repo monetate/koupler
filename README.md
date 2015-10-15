@@ -33,6 +33,10 @@ You should see the following:
     -udp                      udp mode
 ```
 
+The parameters are fairly straight-forward, but be sure to have a look at ```conf/kpl.properties```.
+Also, you can control logging levels by changing ```conf/log4j2.xml```.
+
+
 The Consumer
 -----
 
@@ -49,7 +53,7 @@ To kick the tires a bit, you can start the built-in consumer.  The built-in cons
 
 TCP
 -----
-Next, fire up the TCP server and throw some data at it!
+Next, fire up the TCP server and throw some data at it!  The following is an example command-line.
 
 ```bash
    $ ./koupler.sh -tcp -streamName boneill-dev-test
@@ -63,7 +67,14 @@ You can then fire events at the TCP server directly.  Each line represents an ev
    Escape character is '^]'.
    lisa
    collin
-owen
+   owen
+```
+
+And in the consumer you should see:
+```bash
+[DEBUG] 2015-10-14 23:50:24,456 koupler.KinesisEventConsumer.processRecords - Recieved [lisa]
+[DEBUG] 2015-10-14 23:50:24,456 koupler.KinesisEventConsumer.processRecords - Recieved [collin]
+[DEBUG] 2015-10-14 23:50:24,456 koupler.KinesisEventConsumer.processRecords - Recieved [owen]
 ```
 
 

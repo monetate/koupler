@@ -1,5 +1,7 @@
 package com.monetate.koupler;
 
+import static org.junit.Assert.assertEquals;
+
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIBuilder;
@@ -11,16 +13,13 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.monetate.koupler.Koupler;
-
-import static org.junit.Assert.assertEquals;
-
 public class KouplerWebServicesTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(KouplerWebServicesTest.class);
 
     @Test
     public void testRest() throws Exception {
-        Thread server = new Thread(new Koupler());
+        MockKinesisEventProducer producer = new MockKinesisEventProducer();
+        Thread server = new Thread(new KouplerWebService(producer));
         server.start();
         Thread.sleep(1000);
 

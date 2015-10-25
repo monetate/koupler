@@ -9,4 +9,4 @@ do
   CLASSPATH=${CLASSPATH}:${i}
 done
 
-java -Dlog4j.configurationFile=conf/log4j2.xml -cp ".:${CLASSPATH}" com.monetate.koupler.Koupler
+java -Dlog4j.configurationFile=conf/log4j2.xml -cp ".:${CLASSPATH}" com.monetate.koupler.Koupler $@

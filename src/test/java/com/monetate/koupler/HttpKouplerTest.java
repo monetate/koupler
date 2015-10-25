@@ -26,7 +26,7 @@ public class HttpKouplerTest {
         URIBuilder builder = new URIBuilder();
         CloseableHttpClient client = HttpClients.createDefault();
         builder = new URIBuilder();
-        builder.setScheme("http").setHost("localhost").setPort(4567).setPath("/events");
+        builder.setScheme("http").setHost("localhost").setPort(4567).setPath("/event");
         HttpPost post = new HttpPost(builder.toString());
         post.setEntity(new ByteArrayEntity("foo".getBytes()));
         CloseableHttpResponse response = client.execute(post);

@@ -42,7 +42,6 @@ dependencies {
     compile group: 'org.eclipse.jetty', name: 'jetty-util', version:'9.0.2.v20130417'
     compile group: 'org.eclipse.jetty', name: 'jetty-io', version:'9.0.2.v20130417'
     compile group: 'org.eclipse.jetty', name: 'jetty-http', version:'9.0.2.v20130417'
-    compile group: 'org.eclipse.jetty.orbit', name:'javax.servlet', version:'3.0.0.v201112011016'
 }
 
 task copyRuntimeLibs(type: Copy) {

@@ -13,25 +13,25 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class KouplerWebServicesTest {
-    private static final Logger LOGGER = LoggerFactory.getLogger(KouplerWebServicesTest.class);
+public class HttpKouplerTest {
+    private static final Logger LOGGER = LoggerFactory.getLogger(HttpKouplerTest.class);
 
     @Test
     public void testRest() throws Exception {
         MockKinesisEventProducer producer = new MockKinesisEventProducer();
-        Thread server = new Thread(new HttpKoupler(producer));
+        Thread server = new Thread(new HttpKoupler(producer, 4567));
         server.start();
         Thread.sleep(1000);
 
         URIBuilder builder = new URIBuilder();
         CloseableHttpClient client = HttpClients.createDefault();
         builder = new URIBuilder();
-        builder.setScheme("http").setHost("localhost").setPort(4567).setPath("/admin");
+        builder.setScheme("http").setHost("localhost").setPort(4567).setPath("/event");
         HttpPost post = new HttpPost(builder.toString());
-        post.setEntity(new ByteArrayEntity("pause".getBytes()));
+        post.setEntity(new ByteArrayEntity("foo".getBytes()));
         CloseableHttpResponse response = client.execute(post);
         String responseBody = EntityUtils.toString(response.getEntity());
-        LOGGER.debug("Received [{}] as response from admin server.", responseBody);
+        LOGGER.debug("Received [{}] as response from HTTP server.", responseBody);
         assertEquals("Did not receive valid response code", 200, response.getStatusLine().getStatusCode());
         
     }

@@ -86,14 +86,13 @@ public abstract class Koupler implements Runnable {
         options.addOption("tcp", false, "tcp mode");
         options.addOption("pipe", false, "pipe mode");
         options.addOption("consumer", false, "consumer mode");
-
         options.addOption("streamName", true, "kinesis stream name");
 
         // ---
 
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = parser.parse(options, args);
-
+        
         if (cmd.hasOption("propertiesFile")) {
             propertiesFile = cmd.getOptionValue("propertiesFile");
         }
@@ -109,9 +108,9 @@ public abstract class Koupler implements Runnable {
             partitionKeyField = Integer.parseInt(cmd.getOptionValue("paritionKeyField"));
         }
 
-        // Check to see they specified one of (udp, tcp or pipe)
-        if (!cmd.hasOption("udp") && !cmd.hasOption("tcp") && !cmd.hasOption("pipe") && !cmd.hasOption("consumer")) {
-            System.err.println("Must specify either: udp, tcp, pipe, or consumer");
+        // Check to see they specified one of (udp, tcp http, or pipe)
+        if (!cmd.hasOption("udp") && !cmd.hasOption("tcp") && !cmd.hasOption("http") && !cmd.hasOption("pipe") && !cmd.hasOption("consumer")) {
+        	System.err.println("Must specify either: udp, http, tcp, pipe, or consumer");
             misconfigured = true;
         }
 
@@ -138,6 +137,8 @@ public abstract class Koupler implements Runnable {
             koupler = new TcpKoupler(producer, port);
         } else if (cmd.hasOption("udp")) {
             koupler = new UdpKoupler(producer, port);
+        } else if (cmd.hasOption("http")) {
+            koupler = new HttpKoupler(producer, port);
         } else if (cmd.hasOption("pipe")) {
             koupler = new PipeKoupler(producer);
         } else if (cmd.hasOption("consumer")) {

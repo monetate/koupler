@@ -1,7 +1,7 @@
 Koupler
 =====================================
 
-This project provides TCP, UDP and Pipe interaces for Amazon's Kinesis.  Underneath the covers, it uses
+This project provides TCP, HTTP, UDP and Pipe interaces for Amazon's Kinesis.  Underneath the covers, it uses
 the [Kinesis Producer Library (KPL)](https://github.com/awslabs/amazon-kinesis-producer).  The daemon 
 listens on TCP/UDP, or takes input from a pipe.  Regardless of the mode, it handles the stream line-by-line, 
 splitting the line based on the delimiter supplied, and then uses the specified field as the Kinesis partition key
@@ -34,6 +34,7 @@ You should see the following:
     -propertiesFile <arg>     kpl properties file (default: ./conf/kpl.properties)
     -streamName <arg>         kinesis stream name
     -tcp                      tcp mode
+    -http                     http mode
     -udp                      udp mode
 ```
 
@@ -97,6 +98,23 @@ You can sling data at the UDP listener with the following:
    $ nc -u localhost 4242
    murphy
    bailey
+```
+
+HTTP
+-----
+
+Next, fire up the HTTP server! The server takes a POST, and queues the body of the HTTP request.
+ The following is an example command-line.
+
+```bash
+   $ ./koupler.sh -http -streamName boneill-dev-test
+```
+
+You can sling data at the UDP listener with the following:
+
+```bash
+   $ curl -d "drago" http://localhost:4567/event
+   ACK
 ```
 
 Pipe

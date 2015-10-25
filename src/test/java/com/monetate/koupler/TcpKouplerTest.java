@@ -37,7 +37,7 @@ public class TcpKouplerTest {
     }
 
     public void sendEvent(OutputStream stream, int x) throws IOException {
-        String offer = String.format("offer,1,999,2015-09-29 00:16:18,2,1443485683020,676098207,322877,%s\n", x);
+        String offer = String.format("foo,%s\n", x);
         LOGGER.info("Sending [{}]", offer);
         stream.write(offer.getBytes());
     }

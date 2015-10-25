@@ -82,6 +82,7 @@ public abstract class Koupler implements Runnable {
         options.addOption("delimiter", true, "delimiter between fields (default: '" + delimiter + "')");
 
         options.addOption("udp", false, "udp mode");
+        options.addOption("http", false, "udp mode");
         options.addOption("tcp", false, "tcp mode");
         options.addOption("pipe", false, "pipe mode");
         options.addOption("consumer", false, "consumer mode");
@@ -122,6 +123,11 @@ public abstract class Koupler implements Runnable {
             streamName = cmd.getOptionValue("streamName");
         }
 
+        if (!cmd.hasOption("streamName")) {
+        
+        }
+
+        
         if (misconfigured) {
             HelpFormatter formatter = new HelpFormatter();
             formatter.setWidth(120);

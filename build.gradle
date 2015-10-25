@@ -6,8 +6,8 @@ version = '0.1.0-SNAPSHOT'
 
 description = """koupler"""
 
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 repositories {
     mavenCentral()
@@ -30,7 +30,7 @@ dependencies {
     compile group: 'com.amazonaws', name: 'aws-java-sdk-s3', version:'1.9.37'
     compile group: 'org.slf4j', name: 'slf4j-api', version:'1.7.12'
     compile group: 'junit', name: 'junit', version:'4.11'
-    compile group: 'com.sparkjava', name: 'spark-core', version:'1.1.1'
+    compile group: 'com.sparkjava', name: 'spark-core', version:'2.3'
     compile group: 'io.dropwizard.metrics', name: 'metrics-core', version:'3.1.2'
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version:'4.3.4'
     compile group: 'org.apache.httpcomponents', name: 'httpcore', version:'4.3.2'

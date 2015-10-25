@@ -26,12 +26,12 @@ public class HttpKouplerTest {
         URIBuilder builder = new URIBuilder();
         CloseableHttpClient client = HttpClients.createDefault();
         builder = new URIBuilder();
-        builder.setScheme("http").setHost("localhost").setPort(4567).setPath("/admin");
+        builder.setScheme("http").setHost("localhost").setPort(4567).setPath("/events");
         HttpPost post = new HttpPost(builder.toString());
-        post.setEntity(new ByteArrayEntity("pause".getBytes()));
+        post.setEntity(new ByteArrayEntity("foo".getBytes()));
         CloseableHttpResponse response = client.execute(post);
         String responseBody = EntityUtils.toString(response.getEntity());
-        LOGGER.debug("Received [{}] as response from admin server.", responseBody);
+        LOGGER.debug("Received [{}] as response from HTTP server.", responseBody);
         assertEquals("Did not receive valid response code", 200, response.getStatusLine().getStatusCode());
         
     }

@@ -23,14 +23,14 @@ public class PipeKouplerTest {
         thread.start();
         
         for (int i=0; i < TOTAL_LINES; i++){
-            this.sendEvent(outputStream);
+            this.sendEvent(outputStream, i);
         }        
         Thread.sleep(500);
         assertEquals("Did not queue all records!", TOTAL_LINES, mockProducer.COUNT.get());     
 	}
 	
-    public void sendEvent(PipedOutputStream out) throws IOException {
-        String offer = "offer,1,999,2015-09-29 00:16:18,2,1443485683020,676098207,322877,1\n";
+    public void sendEvent(PipedOutputStream out, int x) throws IOException {
+        String offer = String.format("foo,%s\n", x);
         byte[] sendData = offer.getBytes();
         out.write(sendData);
     }

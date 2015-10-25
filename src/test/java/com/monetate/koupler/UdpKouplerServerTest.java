@@ -38,9 +38,8 @@ public class UdpKouplerServerTest {
     }
 
     public void sendEvent(InetAddress ipAddress, DatagramSocket socket, int x) throws IOException {
-        String offer = String.format("offer,1,999,2015-09-29 00:16:18,2,1443485683020,676098207,322877,%s", x);
+        String offer = String.format("foo,%s", x);
         LOGGER.info("Sending [{}]", offer);
-
         byte[] sendData = offer.getBytes();
         DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, ipAddress, 4242);
         socket.send(sendPacket);

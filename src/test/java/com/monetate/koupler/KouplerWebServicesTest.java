@@ -19,7 +19,7 @@ public class KouplerWebServicesTest {
     @Test
     public void testRest() throws Exception {
         MockKinesisEventProducer producer = new MockKinesisEventProducer();
-        Thread server = new Thread(new KouplerWebService(producer));
+        Thread server = new Thread(new HttpKoupler(producer));
         server.start();
         Thread.sleep(1000);
 

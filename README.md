@@ -9,8 +9,9 @@ and queues the message with KPL.
 
 Building
 --------
+Koupler uses [gradle](http://gradle.org/) as its build system.  To build kouple with gradle, run the following:
 ```bash
-   mvn -Dmaven.test.skip=true clean assembly:assembly
+   gradle clean build copyRuntimeLibs
 ```
 
 Usage

@@ -87,6 +87,7 @@ public abstract class Koupler implements Runnable {
         options.addOption("pipe", false, "pipe mode");
         options.addOption("consumer", false, "consumer mode");
         options.addOption("streamName", true, "kinesis stream name");
+        options.addOption("appName", true, "app/consumername");
 
         // ---
 
@@ -142,7 +143,11 @@ public abstract class Koupler implements Runnable {
         } else if (cmd.hasOption("pipe")) {
             koupler = new PipeKoupler(producer);
         } else if (cmd.hasOption("consumer")) {
-            KinesisEventConsumer consumer = new KinesisEventConsumer(propertiesFile, streamName);
+        	String appName = "koupler";
+        	if (cmd.hasOption("appName")){
+        		appName = cmd.getOptionValue("appName");
+        	}
+            KinesisEventConsumer consumer = new KinesisEventConsumer(propertiesFile, streamName, appName);
             consumer.start();
         }
         

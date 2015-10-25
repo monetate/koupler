@@ -103,7 +103,8 @@ You can sling data at the UDP listener with the following:
 HTTP
 -----
 
-Next, fire up the HTTP server!  The following is an example command-line.
+Next, fire up the HTTP server! The server takes a POST, and queues the body of the HTTP request.
+ The following is an example command-line.
 
 ```bash
    $ ./koupler.sh -http -streamName boneill-dev-test

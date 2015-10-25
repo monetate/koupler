@@ -20,11 +20,11 @@ public class KinesisEventConsumer implements IRecordProcessorFactory {
     private static final Logger LOGGER = LoggerFactory.getLogger(KinesisEventConsumer.class);
     private Worker.Builder builder;
 
-    public KinesisEventConsumer(String propertiesFile, String streamName) {
+    public KinesisEventConsumer(String propertiesFile, String streamName, String appName) {
         KinesisProducerConfiguration config = KinesisProducerConfiguration.fromPropertiesFile(propertiesFile);
 
-        KinesisClientLibConfiguration clientConfig = new KinesisClientLibConfiguration("koupler-listener", streamName,
-                new DefaultAWSCredentialsProviderChain(), "koupler-listener")
+        KinesisClientLibConfiguration clientConfig = new KinesisClientLibConfiguration(appName, streamName,
+                new DefaultAWSCredentialsProviderChain(), appName)
                         .withRegionName(config.getRegion())
                         .withInitialPositionInStream(InitialPositionInStream.TRIM_HORIZON);
         

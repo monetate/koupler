@@ -139,9 +139,11 @@ Finally, for those that like pipes, we have the always versatile pipe version:
 Metrics
 -----
 Koupler keeps track of following metrics.  These metrics are available in CloudWatch under 'Custom Metrics', 
+and lets you see status by host.  Use the "-metrics" switch to enable.
 
 | Metric | Description | 
 |--------|-------------|
 | BytesPerEvent | Average bytes per event / message | 
 | CompletedEventsPerSecond | Events per second successfully ack'd by Kinesis | 
 | QueuedEventsPerSecond | Events per second queued with the Kinesis Producer Library (KPL) | 
+| EventQueueCount | The size of the queue/backlog within KPL |

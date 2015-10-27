@@ -55,6 +55,10 @@ public class KinesisEventProducer implements Runnable {
     public int getQueueSize(){
         return producer.getOutstandingRecordsCount();
     }
+    
+    public void startMetrics(){
+    	this.metrics.start(30);
+    }
 
     public String getPartitionKey(String event) {
         String[] fields = event.split(this.delimiter);

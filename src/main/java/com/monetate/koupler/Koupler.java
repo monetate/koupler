@@ -141,11 +141,10 @@ public abstract class Koupler implements Runnable {
     		appName = cmd.getOptionValue("appName");
     	}
     	
-    	if (cmd.hasOption("metrics")){
-    		
-    	}
-        
         KinesisEventProducer producer = new KinesisEventProducer(propertiesFile, streamName, delimiter, partitionKeyField, appName);
+    	if (cmd.hasOption("metrics")){
+    		producer.startMetrics();
+    	}        
 
         Koupler koupler = null;
         boolean server = true;

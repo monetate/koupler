@@ -141,7 +141,7 @@ Metrics
 Koupler keeps track of following metrics.  These metrics are available in CloudWatch under 'Custom Metrics', 
 
 | Metric | Description | 
-------------------------
+|--------|-------------|
 | BytesPerEvent | Average bytes per event / message | 
 | CompletedEventsPerSecond | Events per second successfully ack'd by Kinesis | 
 | QueuedEventsPerSecond | Events per second queued with the Kinesis Producer Library (KPL) | 

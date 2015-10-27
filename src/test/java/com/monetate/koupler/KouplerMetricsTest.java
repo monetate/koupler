@@ -16,7 +16,8 @@ public class KouplerMetricsTest {
 
 	@Test
 	public void testMetrics() throws InterruptedException {
-		KouplerMetrics metrics = new KouplerMetrics();
+        MockKinesisEventProducer mockProducer = new MockKinesisEventProducer();
+		KouplerMetrics metrics = new KouplerMetrics(mockProducer, "mock-test");
 		for (int i = 0; i < 1000; i++) {
 			metrics.queueEvent(random.nextInt(100));
 		}

@@ -88,8 +88,8 @@ public abstract class Koupler implements Runnable {
         options.addOption("consumer", false, "consumer mode");
         options.addOption("streamName", true, "kinesis stream name");
         options.addOption("appName", true, "app/consumername");
-
-        // ---
+        options.addOption("position", true, "initial position in stream (default: LATEST)");
+        options.addOption("metrics", false, "publish metrics to cloudwatch");
 
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = parser.parse(options, args);
@@ -108,6 +108,12 @@ public abstract class Koupler implements Runnable {
         if (cmd.hasOption("paritionKeyField")) {
             partitionKeyField = Integer.parseInt(cmd.getOptionValue("paritionKeyField"));
         }
+        
+        String initialPosition = "LATEST";
+        if (cmd.hasOption("position")) {
+        	initialPosition = cmd.getOptionValue("position");
+        }
+        
 
         // Check to see they specified one of (udp, tcp http, or pipe)
         if (!cmd.hasOption("udp") && !cmd.hasOption("tcp") && !cmd.hasOption("http") && !cmd.hasOption("pipe") && !cmd.hasOption("consumer")) {
@@ -129,8 +135,17 @@ public abstract class Koupler implements Runnable {
             formatter.printHelp("java -jar koupler*.jar", options);
             System.exit(-1);
         }
-
-        KinesisEventProducer producer = new KinesisEventProducer(propertiesFile, streamName, delimiter, partitionKeyField);
+        
+        String appName = "koupler";
+    	if (cmd.hasOption("appName")){
+    		appName = cmd.getOptionValue("appName");
+    	}
+    	
+    	if (cmd.hasOption("metrics")){
+    		
+    	}
+        
+        KinesisEventProducer producer = new KinesisEventProducer(propertiesFile, streamName, delimiter, partitionKeyField, appName);
 
         Koupler koupler = null;
         boolean server = true;
@@ -143,11 +158,8 @@ public abstract class Koupler implements Runnable {
         } else if (cmd.hasOption("pipe")) {
             koupler = new PipeKoupler(producer);
         } else if (cmd.hasOption("consumer")) {
-        	String appName = "koupler";
-        	if (cmd.hasOption("appName")){
-        		appName = cmd.getOptionValue("appName");
-        	}
-            KinesisEventConsumer consumer = new KinesisEventConsumer(propertiesFile, streamName, appName);
+        	
+            KinesisEventConsumer consumer = new KinesisEventConsumer(propertiesFile, streamName, appName, initialPosition);
             consumer.start();
         }
         

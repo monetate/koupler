@@ -39,18 +39,21 @@ public class KinesisEventProducer implements Runnable {
     public KinesisEventProducer() {
     }
 
-    public KinesisEventProducer(String propertiesFile, String streamName, String delimiter, int partitionKeyField) {
+    public KinesisEventProducer(String propertiesFile, String streamName, String delimiter, int partitionKeyField, String appName) {
         KinesisProducerConfiguration config = KinesisProducerConfiguration.fromPropertiesFile(propertiesFile);
-
         this.streamName = streamName;
         this.producer = new KinesisProducer(config);
-        this.metrics = new KouplerMetrics(config);
+        this.metrics = new KouplerMetrics(this, config, appName);
         this.partitionKeyField = partitionKeyField;
         this.delimiter = delimiter;
     }
 
     public void queueEvent(String event) {
         this.queue.add(event);
+    }
+    
+    public int getQueueSize(){
+        return producer.getOutstandingRecordsCount();
     }
 
     public String getPartitionKey(String event) {

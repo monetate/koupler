@@ -3,9 +3,13 @@ Koupler
 
 This project provides TCP, HTTP, UDP and Pipe interaces for Amazon's Kinesis.  Underneath the covers, it uses
 the [Kinesis Producer Library (KPL)](https://github.com/awslabs/amazon-kinesis-producer).  The daemon 
-listens on TCP/UDP, or takes input from a pipe.  Regardless of the mode, it handles the stream line-by-line, 
+listens on TCP/UDP/HTTP, or takes input from a pipe.  Regardless of the mode, it handles the stream line-by-line, 
 splitting the line based on the delimiter supplied, and then uses the specified field as the Kinesis partition key
 and queues the message with KPL.
+
+Koupler also tracks metrics using [Coda Hale's most excellent metrics library](https://dropwizard.github.io/metrics/3.1.0/).  Those metrics
+are then published up to Amazon's cloudwatch, allowing you to see per host behavior and throughput information.  For more information, 
+see the metrics section below.
 
 Building
 --------
@@ -131,4 +135,14 @@ Finally, for those that like pipes, we have the always versatile pipe version:
    [DEBUG] 2015-10-15 00:18:05,703 koupler.Koupler.call - Queueing event [hello]
    [DEBUG] 2015-10-15 00:18:05,703 koupler.Koupler.call - Queueing event [world]
 ```
+
+Metrics
+-----
+Koupler keeps track of following metrics.  These metrics are available in CloudWatch under 'Custom Metrics', 
+
+| Metric | Description | 
+------------------------
+| BytesPerEvent | Average bytes per event / message | 
+| CompletedEventsPerSecond | Events per second successfully ack'd by Kinesis | 
+| QueuedEventsPerSecond | Events per second queued with the Kinesis Producer Library (KPL) | 
 

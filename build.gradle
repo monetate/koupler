@@ -2,7 +2,7 @@ apply plugin: 'java'
 apply plugin: 'maven'
 
 group = 'com.monetate'
-version = '0.2.0-SNAPSHOT'
+version = '0.2.0'
 
 description = """koupler"""
 

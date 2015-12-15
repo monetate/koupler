@@ -1,10 +1,9 @@
 #!/bin/bash
 
 BASEDIR=$(dirname $0)
-#echo $BASEDIR
 
 CLASSPATH=
-for i in `ls ./build/libs/*.jar`
+for i in `ls ./lib/*.jar`
 do
   CLASSPATH=${CLASSPATH}:${i}
 done

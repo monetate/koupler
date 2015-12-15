@@ -1,1 +1,1 @@
-gradle clean build copyRuntimeLibs
+gradle clean build copyRuntimeLibs batchZip

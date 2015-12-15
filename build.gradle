@@ -14,7 +14,7 @@ repositories {
 }
 
 configurations {
-  runtime.exclude group: "org.slf4j", module: "slf4j-simple"
+    runtime.exclude group: "org.slf4j", module: "slf4j-simple"
 }
 
 dependencies {
@@ -47,4 +47,22 @@ dependencies {
 task copyRuntimeLibs(type: Copy) {
     from configurations.runtime
     into 'build/libs'
+}
+
+task batchZip(type: Zip) {
+    into('koupler') {
+        from 'LICENSE.txt'
+        from 'README.md'
+        from 'bin/koupler.sh'
+
+        into('conf') {
+            from { fileTree('conf').files }
+            include('*')
+        }
+
+        into('lib') {
+            from { fileTree('build/libs').files }
+            include('*.jar')
+        }
+    }
 }

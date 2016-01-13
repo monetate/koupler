@@ -44,7 +44,7 @@ public abstract class Koupler implements Runnable {
 
         @Override
         public Integer call() {
-            int numOfEvents = 0; 
+            int numOfEvents = 0;
             while (running) {
                 try {
                     String event = bufferedReader.readLine();

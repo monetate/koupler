@@ -22,7 +22,6 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class Koupler implements Runnable {
     private static final Logger LOGGER = LoggerFactory.getLogger(Koupler.class);
-    private boolean running = true;
     public KinesisEventProducer producer;
     private ExecutorService threadPool;
 
@@ -37,6 +36,7 @@ public abstract class Koupler implements Runnable {
 
     class KouplerThread implements Callable<Integer> {
         private BufferedReader bufferedReader;
+        private boolean running = true;
 
         public KouplerThread(BufferedReader bufferedReader) {
             this.bufferedReader = bufferedReader;

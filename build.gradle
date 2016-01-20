@@ -1,3 +1,7 @@
+plugins {
+  id 'net.researchgate.release' version '2.3.4'
+}
+
 apply plugin: 'java'
 apply plugin: 'maven'
 
@@ -8,6 +12,19 @@ description = """koupler"""
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+
+release {
+    versionPropertyFile = 'gradle.properties'
+    buildTasks = ['build', 'copyRuntimeLibs', 'batchZip']
+    scmAdapters = [
+        net.researchgate.release.GitAdapter
+    ]
+    git {
+        requireBranch = 'master'
+        pushToRemote = 'origin'
+        pushToBranchPrefix = ''
+    }
+}
 
 repositories {
     mavenCentral()

@@ -110,9 +110,10 @@ public abstract class Koupler implements Runnable {
         options.addOption("pipe", false, "pipe mode");
         options.addOption("consumer", false, "consumer mode");
         options.addOption("streamName", true, "kinesis stream name");
-        options.addOption("appName", true, "app/consumername");
+        options.addOption("appName", true, "app/consumer name");
         options.addOption("position", true, "initial position in stream (default: LATEST)");
         options.addOption("metrics", false, "publish metrics to cloudwatch");
+        options.addOption("queueSize", true, "event buffer/queue size (default: 50000)");
 
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = parser.parse(options, args);
@@ -152,6 +153,11 @@ public abstract class Koupler implements Runnable {
             streamName = cmd.getOptionValue("streamName");
         }
 
+       int queueSize = 50000;
+        if (cmd.hasOption("queueSize")) {          
+            queueSize = Integer.parseInt(cmd.getOptionValue("queueSize"));
+        }
+        
         if (misconfigured) {
             HelpFormatter formatter = new HelpFormatter();
             formatter.setWidth(120);
@@ -165,7 +171,7 @@ public abstract class Koupler implements Runnable {
         }
 
         KinesisEventProducer producer = new KinesisEventProducer(propertiesFile, streamName, delimiter,
-                partitionKeyField, appName);
+                partitionKeyField, queueSize, appName);
         if (cmd.hasOption("metrics")) {
             producer.startMetrics();
         }

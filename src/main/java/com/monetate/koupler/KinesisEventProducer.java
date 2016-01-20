@@ -25,21 +25,24 @@ public class KinesisEventProducer implements Runnable {
     public static final int MAX_BACKOFF = 16000;
     private static int backOff = DEFAULT_BACKOFF;
     private static final Random RANDOM = new Random();
-
-    public static final int THROTTLE_ON_QUEUE_SIZE = 10000;
     public static boolean RUNNING = true;
 
     private KouplerMetrics metrics;
     private KinesisProducer producer;
     private String streamName;
     private int partitionKeyField;
+    private int throttleQueueSize;
     private String delimiter;
-    private BlockingQueue<String> queue = new ArrayBlockingQueue<String>(THROTTLE_ON_QUEUE_SIZE);
+    private BlockingQueue<String> queue; 
 
-    public KinesisEventProducer() {
+    public KinesisEventProducer(int throttleQueueSize) {
+        this.throttleQueueSize = throttleQueueSize;
+        queue = new ArrayBlockingQueue<String>(throttleQueueSize);
     }
 
-    public KinesisEventProducer(String propertiesFile, String streamName, String delimiter, int partitionKeyField, String appName) {
+    public KinesisEventProducer(String propertiesFile, String streamName, String delimiter, 
+            int partitionKeyField, int throttleQueueSize, String appName) {
+        this(throttleQueueSize);
         KinesisProducerConfiguration config = KinesisProducerConfiguration.fromPropertiesFile(propertiesFile);
         this.streamName = streamName;
         this.producer = new KinesisProducer(config);
@@ -49,7 +52,7 @@ public class KinesisEventProducer implements Runnable {
     }
 
     public void queueEvent(String event) throws EventQueueFullException {
-        if (queue.size() >= THROTTLE_ON_QUEUE_SIZE){
+        if (queue.remainingCapacity() == 0){
             throw new EventQueueFullException(queue.size());
         }        
         this.queue.add(event);
@@ -85,7 +88,7 @@ public class KinesisEventProducer implements Runnable {
     public void run() {
         while (RUNNING) {
             try {
-                if (producer != null && producer.getOutstandingRecordsCount() > THROTTLE_ON_QUEUE_SIZE) {
+                if (producer != null && producer.getOutstandingRecordsCount() > throttleQueueSize) {
                     LOGGER.warn("Throttling ingest, waiting [{}] milliseconds, for KPL to put [{}] records.",
                             backOff, this.producer.getOutstandingRecordsCount());
                     Thread.sleep(backOff);

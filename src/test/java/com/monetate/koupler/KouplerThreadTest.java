@@ -1,6 +1,6 @@
 package com.monetate.koupler;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -30,8 +30,36 @@ public class KouplerThreadTest {
         data = new BufferedReader(new InputStreamReader(is));
         future = koupler.getThreadPool().submit(koupler.new KouplerThread(data));
         int numEvents = future.get();
-        assertEquals("Koupler did no recover: did not receive an event after initial socket drop.", 1, numEvents);
+        assertEquals("Koupler did not recover: did not receive an event after initial socket drop.", 1, numEvents);
         LOGGER.debug("Received [{}] events from socket [{}]", future.get());        
     }
 
+    @Test
+    public void testQueueFull() throws InterruptedException, ExecutionException {
+        KinesisEventProducer producer = new KinesisEventProducer();
+        Koupler koupler = new TcpKoupler(producer, 5000);
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < KinesisEventProducer.THROTTLE_ON_QUEUE_SIZE + 2; i++){
+            sb.append("event1:data......................................................................\n");            
+        }
+        InputStream is = new ByteArrayInputStream(sb.toString().getBytes());
+        BufferedReader data = new BufferedReader(new InputStreamReader(is));
+        Future<Integer> future = koupler.getThreadPool().submit(koupler.new KouplerThread(data));
+        int numEventsProcessed = future.get();
+        assertEquals("Somehow didn't process the number of events than the queue allows!", 
+                KinesisEventProducer.THROTTLE_ON_QUEUE_SIZE, numEventsProcessed);
+        
+        producer.clearQueue(); // Simulate recovery!
+        
+        sb = new StringBuilder();
+        for (int i = 0; i < 10; i++){
+            sb.append("event1:data......................................................................\n");            
+        }
+        is = new ByteArrayInputStream(sb.toString().getBytes());
+        data = new BufferedReader(new InputStreamReader(is));
+        future = koupler.getThreadPool().submit(koupler.new KouplerThread(data));
+        numEventsProcessed = future.get();
+        assertEquals("Didn't recover.", 10, numEventsProcessed);
+    }
+    
 }

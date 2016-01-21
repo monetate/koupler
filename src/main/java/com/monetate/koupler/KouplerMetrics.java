@@ -96,7 +96,6 @@ public class KouplerMetrics implements Runnable {
                     .withDimensions(hostDimension)
                     .withMetricName("InternalEventQueueCount")
                     .withValue(producer.getInternalQueueSize() * 1.0);
-
             
             MetricDatum queuedEventsPerSecond = new MetricDatum()
                     .withDimensions(hostDimension)

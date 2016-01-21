@@ -65,10 +65,10 @@ task copyRuntimeLibs(type: Copy) {
 }
 
 task batchZip(type: Zip) {
-    into('koupler') {
+    into("koupler-${version}") {
         from 'LICENSE.txt'
         from 'README.md'
-        from 'bin/koupler.sh'
+        from 'sh/koupler.sh'
 
         into('conf') {
             from { fileTree('conf').files }

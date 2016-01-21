@@ -6,8 +6,6 @@ apply plugin: 'java'
 apply plugin: 'maven'
 
 group = 'com.monetate'
-version = '0.2.0-SNAPSHOT'
-
 description = """koupler"""
 
 sourceCompatibility = 1.8

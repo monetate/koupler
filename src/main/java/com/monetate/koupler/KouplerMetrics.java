@@ -87,11 +87,17 @@ public class KouplerMetrics implements Runnable {
                     .withMetricName("BytesPerEvent")
                     .withValue(bytesHistogram.getSnapshot().getMean());
 
-            MetricDatum eventQueueCount = new MetricDatum()
+            MetricDatum kplEventQueueCount = new MetricDatum()
                     .withDimensions(hostDimension)
-                    .withMetricName("EventQueueCount")
-                    .withValue(producer.getQueueSize() * 1.0);
+                    .withMetricName("KplEventQueueCount")
+                    .withValue(producer.getKplQueueSize() * 1.0);
 
+            MetricDatum internalEventQueueCount = new MetricDatum()
+                    .withDimensions(hostDimension)
+                    .withMetricName("InternalEventQueueCount")
+                    .withValue(producer.getInternalQueueSize() * 1.0);
+
+            
             MetricDatum queuedEventsPerSecond = new MetricDatum()
                     .withDimensions(hostDimension)
                     .withMetricName("QueuedEventsPerSecond")
@@ -103,7 +109,8 @@ public class KouplerMetrics implements Runnable {
                     .withValue(completedMeter.getMeanRate());
 
             cloudWatch.putMetricData(new PutMetricDataRequest().withMetricData(bytesPerEvent).withNamespace(appName));
-            cloudWatch.putMetricData(new PutMetricDataRequest().withMetricData(eventQueueCount).withNamespace(appName));
+            cloudWatch.putMetricData(new PutMetricDataRequest().withMetricData(kplEventQueueCount).withNamespace(appName));
+            cloudWatch.putMetricData(new PutMetricDataRequest().withMetricData(internalEventQueueCount).withNamespace(appName));
             cloudWatch.putMetricData(new PutMetricDataRequest().withMetricData(queuedEventsPerSecond).withNamespace(appName));
             cloudWatch.putMetricData(new PutMetricDataRequest().withMetricData(completedEventsPerSecond).withNamespace(appName));
             

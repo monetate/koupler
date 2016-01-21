@@ -58,10 +58,14 @@ public class KinesisEventProducer implements Runnable {
         this.queue.add(event);
     }
     
-    public int getQueueSize(){
+    public int getInternalQueueSize(){
         return this.queue.size();
     }
-    
+
+    public int getKplQueueSize(){
+        return this.producer.getOutstandingRecordsCount();
+    }
+
     public void clearQueue(){
         this.queue.clear();
     }

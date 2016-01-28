@@ -32,7 +32,7 @@ You should see the following:
    Must specify stream name.
    usage: java -jar koupler*.jar
     -delimiter <arg>          delimiter between fields (default: ',')
-    -partitionKeyField <arg>   field containing partition key (default: 0)
+    -partitionKeyField <arg>  zero-based index of field containing partition key (default: 0)
     -pipe                     pipe mode
     -port <arg>               listening port (default: 4242)
     -propertiesFile <arg>     kpl properties file (default: ./conf/kpl.properties)

@@ -69,15 +69,17 @@ public abstract class Koupler implements Runnable {
                             eqfe.getSize());
                     LOGGER.error(msg);
                     LOGGER.error("WARNING: Dropping events on floor.");
-                    // In this case, it is a valid event, we just don't have room for it
-                    // So we'll continue running until we have room, but will delay to see if the queue clears.
+                    // In this case, it is a valid event, we just don't have
+                    // room for it
+                    // So we'll continue running until we have room, but will
+                    // delay to see if the queue clears.
                     try {
                         LOGGER.warn("Sleeping {}ms waiting for queue to clear.", backOff);
                         Thread.sleep(backOff);
                     } catch (InterruptedException ie) {
                         LOGGER.warn("Insomnia -- can't sleep!", ie);
                     }
-                    backOff = Math.min(MAX_BACKOFF, backOff * 2) + RANDOM.nextInt(100);                    
+                    backOff = Math.min(MAX_BACKOFF, backOff * 2) + RANDOM.nextInt(100);
                 } catch (Exception e) {
                     LOGGER.error("Erroring reading/queuing event [{}]", e);
                     running = false;
@@ -98,7 +100,7 @@ public abstract class Koupler implements Runnable {
         options.addOption("port", true, "listening port (default: " + port + ")");
 
         int partitionKeyField = 0;
-        options.addOption("paritionKeyField", true,
+        options.addOption("partitionKeyField", true,
                 "field containing partition key (default: " + partitionKeyField + ")");
 
         String delimiter = ",";
@@ -129,8 +131,8 @@ public abstract class Koupler implements Runnable {
             delimiter = cmd.getOptionValue("delimiter");
         }
 
-        if (cmd.hasOption("paritionKeyField")) {
-            partitionKeyField = Integer.parseInt(cmd.getOptionValue("paritionKeyField"));
+        if (cmd.hasOption("partitionKeyField")) {
+            partitionKeyField = Integer.parseInt(cmd.getOptionValue("partitionKeyField"));
         }
 
         String initialPosition = "LATEST";
@@ -153,11 +155,11 @@ public abstract class Koupler implements Runnable {
             streamName = cmd.getOptionValue("streamName");
         }
 
-       int queueSize = 50000;
-        if (cmd.hasOption("queueSize")) {          
+        int queueSize = 50000;
+        if (cmd.hasOption("queueSize")) {
             queueSize = Integer.parseInt(cmd.getOptionValue("queueSize"));
         }
-        
+
         if (misconfigured) {
             HelpFormatter formatter = new HelpFormatter();
             formatter.setWidth(120);

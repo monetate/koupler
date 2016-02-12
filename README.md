@@ -68,7 +68,7 @@ Next, fire up the TCP server and throw some data at it!  The following is an exa
    $ ./koupler.sh -tcp -streamName boneill-dev-test
 ```
 
-You can sling data at the UDP listener with the following:
+You can sling data at the TCP listener with the following:
 
 ```bash
    $ telnet localhost 4242

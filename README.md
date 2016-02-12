@@ -68,7 +68,7 @@ Next, fire up the TCP server and throw some data at it!  The following is an exa
    $ ./koupler.sh -tcp -streamName boneill-dev-test
 ```
 
-You can sling data at the UDP listener with the following:
+You can sling data at the TCP listener with the following:
 
 ```bash
    $ telnet localhost 4242
@@ -114,7 +114,7 @@ Next, fire up the HTTP server! The server takes a POST, and queues the body of t
    $ ./koupler.sh -http -streamName boneill-dev-test
 ```
 
-You can sling data at the UDP listener with the following:
+You can sling data at the HTTP listener with the following:
 
 ```bash
    $ curl -d "drago" http://localhost:4567/event

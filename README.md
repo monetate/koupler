@@ -114,7 +114,7 @@ Next, fire up the HTTP server! The server takes a POST, and queues the body of t
    $ ./koupler.sh -http -streamName boneill-dev-test
 ```
 
-You can sling data at the UDP listener with the following:
+You can sling data at the HTTP listener with the following:
 
 ```bash
    $ curl -d "drago" http://localhost:4567/event

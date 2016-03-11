@@ -1,7 +1,5 @@
 package com.monetate.koupler;
 
-import static org.junit.Assert.assertEquals;
-
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -33,8 +31,7 @@ public class UdpKouplerServerTest {
         }
         long stop = System.currentTimeMillis();
         LOGGER.debug("Emitted [{}] packets in [{}] milliseconds.  Hang tight, testing for dropped packets in UDP server.", TOTAL_PACKETS, stop - start);
-        Thread.sleep(1000); // wait 1 seconds
-        assertEquals("Did not receive all UDP packets!", TOTAL_PACKETS, UdpKoupler.PACKETS.get());
+        mockProducer.waitFor(TOTAL_PACKETS);
     }
 
     public void sendEvent(InetAddress ipAddress, DatagramSocket socket, int x) throws IOException {

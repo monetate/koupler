@@ -24,9 +24,8 @@ public class PipeKouplerTest {
         
         for (int i=0; i < TOTAL_LINES; i++){
             this.sendEvent(outputStream, i);
-        }        
-        Thread.sleep(500);
-        assertEquals("Did not queue all records!", TOTAL_LINES, mockProducer.COUNT.get());     
+        }
+        mockProducer.waitFor(TOTAL_LINES);
 	}
 	
     public void sendEvent(PipedOutputStream out, int x) throws IOException {
@@ -34,5 +33,5 @@ public class PipeKouplerTest {
         byte[] sendData = offer.getBytes();
         out.write(sendData);
     }
-
+    
 }

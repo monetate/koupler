@@ -1,7 +1,5 @@
 package com.monetate.koupler;
 
-import static org.junit.Assert.assertEquals;
-
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
@@ -9,8 +7,6 @@ import java.net.Socket;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.monetate.koupler.TcpKoupler;
 
 public class TcpKouplerTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(TcpKouplerTest.class);
@@ -31,8 +27,7 @@ public class TcpKouplerTest {
         }
         
         LOGGER.debug("Hang tight -- waiting for TCP packets");
-        Thread.sleep(1000);
-        assertEquals("Did not receive all messages over TCP!", TOTAL_LINES, mockProducer.COUNT.get());
+        mockProducer.waitFor(TOTAL_LINES);
         socket.close();
     }
 

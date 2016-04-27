@@ -23,6 +23,23 @@ public class TcpKoupler extends Koupler implements Runnable {
         this.port = port;
     }
 
+    class TcpExceptionHandler implements ExceptionHandler {
+        Socket socket = null;
+
+        public TcpExceptionHandler(Socket socket) {
+            this.socket = socket;
+        }
+
+        public void handleException(Exception e) {
+            try {
+                socket.close();
+            } catch (IOException ioe) {
+                LOGGER.error("Could not close socket", ioe);
+            }
+        }
+
+    }
+
     @Override
     public void run() {
         ServerSocket listener = null;
@@ -30,21 +47,16 @@ public class TcpKoupler extends Koupler implements Runnable {
             listener = new ServerSocket(port);
             while (true) {
                 Socket socket = listener.accept();
-                try {
-                    LOGGER.info("Accepting new socket [{}].", socket);
-                    BufferedReader data = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                    Future<Integer> future = this.getThreadPool().submit(new KouplerThread(data));
-                    Integer numOfEvents = future.get();
-                    LOGGER.debug("Received [{}] events from socket [{}]", numOfEvents, socket);
-                } finally {
-                    socket.close();
-                }
+                LOGGER.info("Accepting new socket [{}].", socket);
+                BufferedReader data = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                Future<Integer> future = this.getThreadPool()
+                        .submit(new KouplerThread(data, new TcpExceptionHandler(socket)));
             }
         } catch (Exception e) {
-            if (listener != null){
+            if (listener != null) {
                 try {
                     listener.close();
-                } catch (IOException ioe){
+                } catch (IOException ioe) {
                     LOGGER.error("Could not close server socket.");
                 }
             }

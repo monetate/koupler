@@ -1,7 +1,5 @@
 package com.monetate.koupler;
 
-import static org.junit.Assert.assertEquals;
-
 import java.io.IOException;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
@@ -25,6 +23,7 @@ public class PipeKouplerTest {
         for (int i=0; i < TOTAL_LINES; i++){
             this.sendEvent(outputStream, i);
         }
+        
         mockProducer.waitFor(TOTAL_LINES);
 	}
 	

@@ -116,7 +116,7 @@ public class KouplerMetrics implements Runnable {
             LOGGER.debug("Published metrics to CloudWatch [{}].", this.toString());
 
         } catch (Exception e) {
-            LOGGER.error("Problem posting metrics to cloudwatch.", e);
+            LOGGER.error("Problem posting or reading cloudwatch metrics.", e);
         }
     }
 }

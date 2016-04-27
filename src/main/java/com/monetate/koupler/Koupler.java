@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Main Class, and super class to all the koupler implementations.
- * 
+ *
  * @author brianoneill
  */
 public abstract class Koupler implements Runnable {
@@ -41,16 +41,23 @@ public abstract class Koupler implements Runnable {
 
     class KouplerThread implements Callable<Integer> {
         private BufferedReader bufferedReader;
+        private ExceptionHandler exceptionHandler;
         private boolean running = true;
         private int backOff = DEFAULT_BACKOFF;
 
-        public KouplerThread(BufferedReader bufferedReader) {
+        public KouplerThread(BufferedReader bufferedReader, ExceptionHandler exceptionHandler) {
             this.bufferedReader = bufferedReader;
+            this.exceptionHandler = exceptionHandler;
+        }
+
+        public KouplerThread(BufferedReader bufferedReader) {
+            this(bufferedReader, null);
         }
 
         @Override
         public Integer call() {
             int numOfEvents = 0;
+            Exception error = null;
             while (running) {
                 try {
                     String event = bufferedReader.readLine();
@@ -83,8 +90,11 @@ public abstract class Koupler implements Runnable {
                 } catch (Exception e) {
                     LOGGER.error("Erroring reading/queuing event [{}]", e);
                     running = false;
+                    error = e;
                 }
             }
+            if (exceptionHandler != null)
+                exceptionHandler.handleException(error);
             return numOfEvents;
         }
     }

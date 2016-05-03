@@ -6,6 +6,9 @@ import java.util.Random;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
+import com.monetate.koupler.format.Format;
+import com.monetate.koupler.format.FormatFactory;
+import org.apache.commons.cli.CommandLine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +33,7 @@ public class KinesisEventProducer implements Runnable {
     private KouplerMetrics metrics;
     private KinesisProducer producer;
     private String streamName;
-    private int partitionKeyField;
+    private Format format;
     private int throttleQueueSize;
     private String delimiter;
     private BlockingQueue<String> queue; 
@@ -40,15 +43,15 @@ public class KinesisEventProducer implements Runnable {
         queue = new ArrayBlockingQueue<String>(throttleQueueSize);
     }
 
-    public KinesisEventProducer(String propertiesFile, String streamName, String delimiter, 
-            int partitionKeyField, int throttleQueueSize, String appName) {
+    public KinesisEventProducer(String format, CommandLine cmd,
+                                String propertiesFile, String streamName,
+                                int throttleQueueSize, String appName) {
         this(throttleQueueSize);
         KinesisProducerConfiguration config = KinesisProducerConfiguration.fromPropertiesFile(propertiesFile);
         this.streamName = streamName;
         this.producer = new KinesisProducer(config);
         this.metrics = new KouplerMetrics(this, config, appName);
-        this.partitionKeyField = partitionKeyField;
-        this.delimiter = delimiter;
+        this.format = FormatFactory.getFormat(format, cmd);
     }
 
     public void queueEvent(String event) throws EventQueueFullException {
@@ -75,15 +78,23 @@ public class KinesisEventProducer implements Runnable {
     }
 
     public String getPartitionKey(String event) {
-        String[] fields = event.split(this.delimiter);
-        if (fields.length > this.partitionKeyField) {
-            return fields[partitionKeyField];
-        } else {
-            LOGGER.warn("Received event w/o enough fields to retrieve partition key. [{}]", event);
+        try {
+            return format.getPartitionKey(event);
+        } catch (Exception e) {
+            LOGGER.warn("Received event from which we could NOT extract partition key.", e);
             return null;
         }
     }
 
+    public String getData(String event) {
+        try {
+            return format.getData(event);
+        } catch (Exception e) {
+            LOGGER.warn("Received event from which we could NOT extractdata.", e);
+            return null;
+        }
+    }
+    
     /**
      * When run as a thread, this will use the buffered reader with which this
      * object was constructed.

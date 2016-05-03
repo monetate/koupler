@@ -108,14 +108,11 @@ public abstract class Koupler implements Runnable {
 
         int port = 4242;
         options.addOption("port", true, "listening port (default: " + port + ")");
-
-        int partitionKeyField = 0;
         options.addOption("partitionKeyField", true,
-                "field containing partition key (default: " + partitionKeyField + ")");
+                "field containing partition key (default: " + 0 + ")");
 
-        String delimiter = ",";
-        options.addOption("delimiter", true, "delimiter between fields (default: '" + delimiter + "')");
-
+        options.addOption("format", true, "format of data (default: 'split')");
+        options.addOption("delimiter", true, "delimiter between fields (default: ',')");
         options.addOption("udp", false, "udp mode");
         options.addOption("http", false, "http mode");
         options.addOption("tcp", false, "tcp mode");
@@ -135,14 +132,6 @@ public abstract class Koupler implements Runnable {
         }
         if (cmd.hasOption("port")) {
             port = Integer.parseInt(cmd.getOptionValue("port"));
-        }
-
-        if (cmd.hasOption("delimiter")) {
-            delimiter = cmd.getOptionValue("delimiter");
-        }
-
-        if (cmd.hasOption("partitionKeyField")) {
-            partitionKeyField = Integer.parseInt(cmd.getOptionValue("partitionKeyField"));
         }
 
         String initialPosition = "LATEST";
@@ -182,8 +171,12 @@ public abstract class Koupler implements Runnable {
             appName = cmd.getOptionValue("appName");
         }
 
-        KinesisEventProducer producer = new KinesisEventProducer(propertiesFile, streamName, delimiter,
-                partitionKeyField, queueSize, appName);
+        String format = "split";
+        if (cmd.hasOption("format")) {
+            appName = cmd.getOptionValue("format");
+        }
+
+        KinesisEventProducer producer = new KinesisEventProducer(format, propertiesFile, streamName, queueSize, appName);
         if (cmd.hasOption("metrics")) {
             producer.startMetrics();
         }

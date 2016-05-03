@@ -59,7 +59,7 @@ dependencies {
     compile group: 'org.eclipse.jetty', name: 'jetty-http', version:'9.0.2.v20130417'
 }
 
-task copyRuntimeLibs(type: Copy) {
+task copyRuntimeLibs(dependsOn: 'build', type: Copy) {
     from configurations.runtime
     into 'build/libs'
 }

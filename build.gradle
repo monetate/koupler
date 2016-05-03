@@ -13,7 +13,7 @@ targetCompatibility = 1.8
 
 release {
     versionPropertyFile = 'gradle.properties'
-    buildTasks = ['build', 'copyRuntimeLibs', 'batchZip']
+    buildTasks = ['build', 'dist']
     scmAdapters = [
         net.researchgate.release.GitAdapter
     ]
@@ -64,7 +64,7 @@ task copyRuntimeLibs(type: Copy) {
     into 'build/libs'
 }
 
-task batchZip(type: Zip) {
+task zipDistribution(dependsOn: 'copyRuntimeLibs', type: Zip) {
     into("koupler-${version}") {
         from 'LICENSE.txt'
         from 'README.md'
@@ -81,3 +81,14 @@ task batchZip(type: Zip) {
         }
     }
 }
+
+task dist (dependsOn: 'zipDistribution', type: Copy){
+    from 'build/distributions/'
+    include '*.zip'
+    into 'releases'
+}
+
+clean{
+    delete "target"
+}
+

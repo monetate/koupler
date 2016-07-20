@@ -3,7 +3,7 @@
 BASEDIR=$(dirname $0)
 
 CLASSPATH=
-for i in `ls ./lib/*.jar`
+for i in `ls $BASEDIR/lib/*.jar`
 do
   CLASSPATH=${CLASSPATH}:${i}
 done

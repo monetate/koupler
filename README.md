@@ -15,8 +15,18 @@ Building
 --------
 Koupler uses [gradle](http://gradle.org/) as its build system.  To build kouple with gradle, run the following:
 ```bash
-   gradle clean build copyRuntimeLibs
+   gradle clean dist
 ```
+
+This will build a zip-file artifact in build/distributions.
+
+Unzip that file with:
+```bash
+   unzip build/distribution/*.zip
+```
+
+And you are ready to use koupler.
+
 
 Usage
 -------
@@ -133,7 +143,7 @@ Finally, for those that like pipes, we have the always versatile pipe version:
    [2015-10-15 00:18:05.360559] [0x00007fff7120e000] [info] [metrics_manager.h:148] Uploading metrics to monitoring.us-east-1.amazonaws.com:443
    [INFO] 2015-10-15 00:18:05,699 koupler.KinesisEventProducer.<init> - Firing up pipe listener
    [DEBUG] 2015-10-15 00:18:05,703 koupler.Koupler.call - Queueing event [hello]
-   [DEBUG] 2015-10-15 00:18:05,703 koupler.Koupler.call - Queueing event [world]
+   [DEBUG] 2015-10-15 00:18:05,704 koupler.Koupler.call - Queueing event [world]
 ```
 
 Metrics
@@ -147,3 +157,4 @@ and lets you see status by host.  Use the "-metrics" switch to enable.
 | CompletedEventsPerSecond | Events per second successfully ack'd by Kinesis | 
 | QueuedEventsPerSecond | Events per second queued with the Kinesis Producer Library (KPL) | 
 | EventQueueCount | The size of the queue/backlog within KPL |
+

@@ -15,8 +15,18 @@ Building
 --------
 Koupler uses [gradle](http://gradle.org/) as its build system.  To build kouple with gradle, run the following:
 ```bash
-   gradle clean build copyRuntimeLibs
+   gradle clean dist
 ```
+
+This will build a zip-file artifact in build/distributions.
+
+Unzip that file with:
+```bash
+   unzip build/distribution/*.zip
+```
+
+And you are ready to use koupler.
+
 
 Usage
 -------

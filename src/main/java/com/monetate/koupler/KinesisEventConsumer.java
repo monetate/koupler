@@ -50,7 +50,7 @@ public class KinesisEventConsumer implements IRecordProcessorFactory {
                     byte[] bytes = new byte[record.getData().remaining()]; 
                     record.getData().get(bytes);
                     String data = new String(bytes);
-                    LOGGER.debug("Recieved [{}]", data);
+                    LOGGER.debug("Received [{}]", data);
                 }
             }
 

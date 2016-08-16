@@ -92,9 +92,9 @@ You can sling data at the TCP listener with the following:
 
 And in the consumer you should see:
 ```bash
-   [DEBUG] 2015-10-14 23:50:24,456 koupler.KinesisEventConsumer.processRecords - Recieved [lisa]
-   [DEBUG] 2015-10-14 23:50:24,456 koupler.KinesisEventConsumer.processRecords - Recieved [collin]
-   [DEBUG] 2015-10-14 23:50:24,456 koupler.KinesisEventConsumer.processRecords - Recieved [owen]
+   [DEBUG] 2015-10-14 23:50:24,456 koupler.KinesisEventConsumer.processRecords - Received [lisa]
+   [DEBUG] 2015-10-14 23:50:24,456 koupler.KinesisEventConsumer.processRecords - Received [collin]
+   [DEBUG] 2015-10-14 23:50:24,456 koupler.KinesisEventConsumer.processRecords - Received [owen]
 ```
 
 UDP

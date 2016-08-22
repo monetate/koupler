@@ -1,7 +1,9 @@
-build
+/build
+/releases
 .gradle
 /bin/
 .idea
 .settings
 .project
 .classpath
+.DS_Store

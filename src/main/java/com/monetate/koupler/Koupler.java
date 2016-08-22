@@ -173,7 +173,7 @@ public abstract class Koupler implements Runnable {
 
         String format = "split";
         if (cmd.hasOption("format")) {
-            appName = cmd.getOptionValue("format");
+            format = cmd.getOptionValue("format");
         }
 
         KinesisEventProducer producer = new KinesisEventProducer(format, cmd, propertiesFile, streamName, queueSize, appName);

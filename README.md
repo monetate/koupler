@@ -43,6 +43,7 @@ You should see the following:
    usage: java -jar koupler*.jar
     -delimiter <arg>          delimiter between fields (default: ',')
     -partitionKeyField <arg>  zero-based index of field containing partition key (default: 0)
+    -format <arg>             format for which partitionKey will be extracted (default: split)
     -pipe                     pipe mode
     -port <arg>               listening port (default: 4242)
     -propertiesFile <arg>     kpl properties file (default: ./conf/kpl.properties)

@@ -82,37 +82,37 @@ public class KouplerMetrics implements Runnable {
 
     public void run() {
         try {
-            MetricDatum bytesPerEvent = new MetricDatum()
+            PutMetricDataRequest putMetricDataRequest = new PutMetricDataRequest();
+
+            putMetricDataRequest.withMetricData(new MetricDatum()
                     .withDimensions(hostDimension)
                     .withMetricName("BytesPerEvent")
-                    .withValue(bytesHistogram.getSnapshot().getMean());
+                    .withValue(bytesHistogram.getSnapshot().getMean()));
 
-            MetricDatum kplEventQueueCount = new MetricDatum()
+            putMetricDataRequest.withMetricData(new MetricDatum()
                     .withDimensions(hostDimension)
                     .withMetricName("KplEventQueueCount")
-                    .withValue(producer.getKplQueueSize() * 1.0);
+                    .withValue(producer.getKplQueueSize() * 1.0));
 
-            MetricDatum internalEventQueueCount = new MetricDatum()
+            putMetricDataRequest.withMetricData(new MetricDatum()
                     .withDimensions(hostDimension)
                     .withMetricName("InternalEventQueueCount")
-                    .withValue(producer.getInternalQueueSize() * 1.0);
+                    .withValue(producer.getInternalQueueSize() * 1.0));
             
-            MetricDatum queuedEventsPerSecond = new MetricDatum()
+            putMetricDataRequest.withMetricData(new MetricDatum()
                     .withDimensions(hostDimension)
                     .withMetricName("QueuedEventsPerSecond")
-                    .withValue(queuedMeter.getMeanRate());
+                    .withValue(queuedMeter.getMeanRate()));
 
-            MetricDatum completedEventsPerSecond = new MetricDatum()
+            putMetricDataRequest.withMetricData(new MetricDatum()
                     .withDimensions(hostDimension)
                     .withMetricName("CompletedEventsPerSecond")
-                    .withValue(completedMeter.getMeanRate());
+                    .withValue(completedMeter.getMeanRate()));
 
-            cloudWatch.putMetricData(new PutMetricDataRequest().withMetricData(bytesPerEvent).withNamespace(appName));
-            cloudWatch.putMetricData(new PutMetricDataRequest().withMetricData(kplEventQueueCount).withNamespace(appName));
-            cloudWatch.putMetricData(new PutMetricDataRequest().withMetricData(internalEventQueueCount).withNamespace(appName));
-            cloudWatch.putMetricData(new PutMetricDataRequest().withMetricData(queuedEventsPerSecond).withNamespace(appName));
-            cloudWatch.putMetricData(new PutMetricDataRequest().withMetricData(completedEventsPerSecond).withNamespace(appName));
-            
+            putMetricDataRequest.withNamespace(appName);
+
+            cloudWatch.putMetricData(putMetricDataRequest);
+
             LOGGER.debug("Published metrics to CloudWatch [{}].", this.toString());
 
         } catch (Exception e) {

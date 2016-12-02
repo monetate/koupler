@@ -74,7 +74,7 @@ public class KinesisEventProducer implements Runnable {
     }
     
     public void startMetrics(){
-    	this.metrics.start(30);
+        this.metrics.start(60);
     }
 
     public String getPartitionKey(String event) {

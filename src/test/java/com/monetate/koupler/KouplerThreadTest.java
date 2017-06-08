@@ -18,7 +18,7 @@ public class KouplerThreadTest {
 
     @Test
     public void testThreadRecovery() throws InterruptedException, ExecutionException {
-        Koupler koupler = new TcpKoupler(new MockKinesisEventProducer(), 5000);
+        Koupler koupler = new TcpKoupler(new MockKinesisEventProducer(), 5000, 20);
         String nullData = ""; // will cause a socket drop
         InputStream is = new ByteArrayInputStream(nullData.getBytes());
         BufferedReader data = new BufferedReader(new InputStreamReader(is));
@@ -38,7 +38,7 @@ public class KouplerThreadTest {
     public void testQueueFull() throws InterruptedException, ExecutionException {
         int throttleQueueSize = 10000;
         KinesisEventProducer producer = new KinesisEventProducer(throttleQueueSize);
-        Koupler koupler = new TcpKoupler(producer, 5000);
+        Koupler koupler = new TcpKoupler(producer, 5000, 20);
         StringBuilder sb = new StringBuilder();
         // try to queue an extra 2
         for (int i = 0; i < throttleQueueSize + 2; i++) {

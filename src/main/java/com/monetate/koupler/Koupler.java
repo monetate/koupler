@@ -123,6 +123,7 @@ public abstract class Koupler implements Runnable {
         options.addOption("position", true, "initial position in stream (default: LATEST)");
         options.addOption("metrics", false, "publish metrics to cloudwatch");
         options.addOption("queueSize", true, "event buffer/queue size (default: 50000)");
+        options.addOption("threadPoolSize", true, "thread pool size (default: 20)");
 
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = parser.parse(options, args);
@@ -159,6 +160,11 @@ public abstract class Koupler implements Runnable {
             queueSize = Integer.parseInt(cmd.getOptionValue("queueSize"));
         }
 
+        int threadPoolSize = 20;
+        if (cmd.hasOption("threadPoolSize")) {
+            threadPoolSize = Integer.parseInt(cmd.getOptionValue("threadPoolSize"));
+        }
+
         if (misconfigured) {
             HelpFormatter formatter = new HelpFormatter();
             formatter.setWidth(120);
@@ -184,11 +190,11 @@ public abstract class Koupler implements Runnable {
         Koupler koupler = null;
         boolean server = true;
         if (cmd.hasOption("tcp")) {
-            koupler = new TcpKoupler(producer, port);
+            koupler = new TcpKoupler(producer, port, threadPoolSize);
         } else if (cmd.hasOption("udp")) {
             koupler = new UdpKoupler(producer, port);
         } else if (cmd.hasOption("http")) {
-            koupler = new HttpKoupler(producer, port);
+            koupler = new HttpKoupler(producer, port, threadPoolSize);
         } else if (cmd.hasOption("pipe")) {
             koupler = new PipeKoupler(producer);
         } else if (cmd.hasOption("consumer")) {

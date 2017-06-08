@@ -17,8 +17,8 @@ public class TcpKoupler extends Koupler implements Runnable {
     private static final Logger LOGGER = LoggerFactory.getLogger(TcpKoupler.class);
     private int port;
 
-    public TcpKoupler(KinesisEventProducer producer, int port) {
-        super(producer, 20);
+    public TcpKoupler(KinesisEventProducer producer, int port, int threadPoolSize) {
+        super(producer, threadPoolSize);
         LOGGER.info("Firing up TCP listener on [{}]", port);
         this.port = port;
     }

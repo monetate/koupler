@@ -15,7 +15,7 @@ public class TcpKouplerTest {
     @Test
     public void test() throws IOException, InterruptedException {
         MockKinesisEventProducer mockProducer = new MockKinesisEventProducer();
-        TcpKoupler server = new TcpKoupler(mockProducer, 4242);
+        TcpKoupler server = new TcpKoupler(mockProducer, 4242, 20);
         Thread serverThread = new Thread(server);
         serverThread.start();
         Thread.sleep(1000);

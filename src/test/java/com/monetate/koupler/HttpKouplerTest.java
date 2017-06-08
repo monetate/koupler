@@ -19,7 +19,7 @@ public class HttpKouplerTest {
     @Test
     public void testRest() throws Exception {
         MockKinesisEventProducer producer = new MockKinesisEventProducer();
-        Thread server = new Thread(new HttpKoupler(producer, 4567));
+        Thread server = new Thread(new HttpKoupler(producer, 4567, 20));
         server.start();
         Thread.sleep(1000);
 

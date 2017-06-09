@@ -19,6 +19,10 @@ public class JsonFormat implements Format {
 
     @Override
     public String getPartitionKey(String event) {
+        if (event.trim().length() == 0) {
+            return null;
+        }
+
         Object jsonEvent = Configuration.defaultConfiguration().jsonProvider().parse(event);
         return JsonPath.read(jsonEvent, partitionKeyField);
     }

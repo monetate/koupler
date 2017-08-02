@@ -48,7 +48,7 @@ public class TcpKoupler extends Koupler implements Runnable {
             while (true) {
                 Socket socket = listener.accept();
                 LOGGER.info("Accepting new socket [{}].", socket);
-                BufferedReader data = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                BufferedReader data = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
                 Future<Integer> future = this.getThreadPool()
                         .submit(new KouplerThread(data, new TcpExceptionHandler(socket)));
             }

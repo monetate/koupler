@@ -6,6 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class MockKinesisEventProducer extends KinesisEventProducer {
     public AtomicInteger COUNT = new AtomicInteger();
+    String event;
 
     public MockKinesisEventProducer() {
         super(10000);
@@ -14,6 +15,7 @@ public class MockKinesisEventProducer extends KinesisEventProducer {
     @Override
     public void queueEvent(String event) {
         COUNT.getAndIncrement();
+        this.event = event;
     }
 
     public void waitFor(int expectedCount) throws InterruptedException {

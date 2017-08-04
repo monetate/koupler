@@ -49,7 +49,7 @@ public class TcpKouplerTest {
     @Test
     public void test_unicode() throws IOException, InterruptedException {
         MockKinesisEventProducer mockProducer = new MockKinesisEventProducer();
-        TcpKoupler server = new TcpKoupler(mockProducer, 4242, 20);
+        TcpKoupler server = new TcpKoupler(mockProducer, 4243, 20);
         Thread serverThread = new Thread(server);
         serverThread.start();
         Thread.sleep(1000);
@@ -57,7 +57,7 @@ public class TcpKouplerTest {
         File unicode_file = new File("src/test/resources/sample.txt");
         Scanner sc = new Scanner(unicode_file);
 
-        Socket socket = new Socket("localhost", 4242);
+        Socket socket = new Socket("localhost", 4243);
         OutputStream stream = socket.getOutputStream();
 
         String event = sc.nextLine();

@@ -2,6 +2,7 @@ package com.monetate.koupler;
 
 import java.util.List;
 
+import com.amazonaws.services.kinesis.clientlibrary.lib.worker.ShutdownReason;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,7 +13,6 @@ import com.amazonaws.services.kinesis.clientlibrary.interfaces.IRecordProcessorF
 import com.amazonaws.services.kinesis.clientlibrary.lib.worker.InitialPositionInStream;
 import com.amazonaws.services.kinesis.clientlibrary.lib.worker.KinesisClientLibConfiguration;
 import com.amazonaws.services.kinesis.clientlibrary.lib.worker.Worker;
-import com.amazonaws.services.kinesis.clientlibrary.types.ShutdownReason;
 import com.amazonaws.services.kinesis.model.Record;
 import com.amazonaws.services.kinesis.producer.KinesisProducerConfiguration;
 
@@ -56,6 +56,7 @@ public class KinesisEventConsumer implements IRecordProcessorFactory {
 
             @Override
             public void shutdown(IRecordProcessorCheckpointer checkpointer, ShutdownReason reason) {
+                LOGGER.debug("Shutting down [{}]");
             }
         };
 

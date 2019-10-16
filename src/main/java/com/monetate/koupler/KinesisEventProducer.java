@@ -81,7 +81,7 @@ public class KinesisEventProducer implements Runnable {
         try {
             return format.getPartitionKey(event);
         } catch (Exception e) {
-            LOGGER.warn("Received event from which we could NOT extract partition key.", e);
+            LOGGER.warn("Received event from which we could NOT extract partition key: " + event, e);
             return null;
         }
     }

@@ -27,7 +27,7 @@ Unzip that file with:
 
 Possibly-convenient docker run command to build the artifact:
 ```bash
-docker run --name jdk --mount type=bind,source=$(pwd),target=/home/gradle --rm --entrypoint /usr/bin/bash gradle:6-jdk8 /home/gradle/build.sh
+docker run --name koupler --mount type=bind,source=$(pwd),target=/home/gradle --rm --entrypoint /usr/bin/bash gradle:6-jdk8 /home/gradle/build.sh
 ```
 
 And you are ready to use koupler.
